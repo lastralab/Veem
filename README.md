@@ -1,2 +1,2 @@
 # Veem
-Pay with Veem
+Pay with Veem module
