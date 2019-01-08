@@ -24,9 +24,9 @@
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
                                                                 <item name="payment" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Veem_Payment/js/view/payment/view_payment</item>
+                                                                    <item name="component" xsi:type="string">Veem_Payment/js/view/payment/veem</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="veem_payment" xsi:type="array">
+                                                                        <item name="veem" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>

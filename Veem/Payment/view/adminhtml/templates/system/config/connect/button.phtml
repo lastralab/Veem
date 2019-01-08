@@ -1,0 +1,15 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lazaro
+ * Date: 19/12/18
+ * Time: 04:09 PM
+ */
+
+/** @var $block \Veem\Payment\Block\Adminhtml\System\Config\Connect\Button */
+?>
+<div class="veem-connect-button-container">
+    <button id="<?php echo $block->getId() ?>" class="c2veem" data-mage-init='{"tokenGenerator": {"url": "<?php echo $block->getUrl('veem/oauth/generateToken') ?>"}}'>
+        <span></span>
+    </button>
+</div>

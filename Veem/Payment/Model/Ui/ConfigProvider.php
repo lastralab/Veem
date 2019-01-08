@@ -8,11 +8,19 @@
 namespace Veem\Payment\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Veem\Payment\Gateway\Http\Client\Client;
+use Magento\Payment\Gateway\Config\Config;
 
 class ConfigProvider implements ConfigProviderInterface
 {
-    const CODE = 'veem_payment';
+    const CODE = 'veem';
+
+    private $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * Retrieve assoc array of checkout configuration
      *
@@ -23,10 +31,8 @@ class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 self::CODE => [
-                    'transactionResults' => [
-                        Client::SUCCESS => __('Success'),
-                        Client::FAILURE => __('Fraud')
-                    ]
+                    'active' => $this->config->getValue('active'),
+                    'button' => $this->config->getValue('pay_btn')
                 ]
             ]
         ];

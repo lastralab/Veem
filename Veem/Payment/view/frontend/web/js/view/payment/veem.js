@@ -14,8 +14,8 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'veem_payment',
-                component: 'Veem_Payment/js/view/payment/method-renderer/view_payment'
+                type: 'veem',
+                component: 'Veem_Payment/js/view/payment/method-renderer/veem'
             }
         );
         /** Add view logic here if needed */

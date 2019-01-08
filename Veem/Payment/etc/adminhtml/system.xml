@@ -2,8 +2,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="veem_payment" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>Veem Pay</label>
+            <group id="veem" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label><![CDATA[<button type="button" class="veem_logo"></button><p class="veem_desc">Veem is the simplest way for businesses to send payments globally.</p>]]></label>
+                <fieldset_css>complex amazon-payment-section</fieldset_css>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -11,11 +13,26 @@
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Title</label>
                 </field>
-                <field id="merchant_email" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Merchant Email</label>
-                    <comment>Email Associated with Veem Account</comment>
+                <field id="merchant_id" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="pay_btn" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="merchant_secret" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="allow_token" translate="label" type="hidden" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>Veem\Payment\Block\Adminhtml\System\Config\AllowToken</frontend_model>
+                    <backend_model>Veem\Payment\Model\Config\Backend\NoSave</backend_model>
+                </field>
+                <field id="connect_btn" translate="label" type="button" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>Veem\Payment\Block\Adminhtml\System\Config\Connect\Button</frontend_model>
+                    <backend_model>Veem\Payment\Model\Config\Backend\NoSave</backend_model>
+                    <depends>
+                        <field id="*/*/allow_token">1</field>
+                    </depends>
+                </field>
+                <field id="pay_btn" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Pay with Veem Button Style</label>
                     <source_model>Veem\Payment\Model\Config\Source\PayBtn</source_model>
                 </field>
@@ -36,7 +53,6 @@
                 <field id="sort_order" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1"
                        showInStore="0">
                     <label>Sort Order</label>
-                    <frontend_class>validate-number</frontend_class>
                 </field>
             </group>
         </section>

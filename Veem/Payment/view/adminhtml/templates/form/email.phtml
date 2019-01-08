@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lazaro
+ * Date: 18/12/18
+ * Time: 04:09 PM
+ */
+/** @var  \Magento\Payment\Block\Form $block */
+$code = $block->escapeHtml($block->getMethodCode());
+?>
+<fieldset class="admin__fieldset payment-method"
+          id="payment_form_<?= /* @noEscape */ $code ?>"
+          style="display:none"
+>
+    <div class="admin__field _required">
+        <label class="label admin__field-label">
+            <span><?= $block->escapeHtml(__('Email Address')) ?></span>
+        </label>
+        <div class="admin__field-control control">
+            <div id="<?= /* @noEscape */ $code ?>_email" class="admin__control-text hosted-control">
+                <span class="icon-type"></span>
+            </div>
+            <div class="hosted-error">
+                <?= $block->escapeHtml(__('Please, enter valid Email Address')) ?>
+            </div>
+        </div>
+    </div>
+</fieldset>
