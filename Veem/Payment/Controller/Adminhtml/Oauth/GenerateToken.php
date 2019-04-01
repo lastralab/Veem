@@ -10,108 +10,75 @@ namespace Veem\Payment\Controller\Adminhtml\Oauth;
 
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\App\Area;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Json as JsonResult;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Payment\Model\Method\ConfigInterface;
-use Magento\Store\Model\ScopeInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Store\Model\App\Emulation;
+use Veem\Payment\Model\Token;
 
 class GenerateToken extends Action
 {
-    const OAUTH_URL = ''; // TODO: tbd by Veem
+    const ADMIN_RESOURCE = 'Veem_Payment::generate_token';
     /**
      * @var ConfigInterface
      */
     protected $config;
 
     /**
-     * @var ZendClient
+     * @var Token
      */
-    protected $client;
+    protected $tokenizer;
 
-    protected $json;
-
-    protected $configWriter;
-
-    protected $logger;
+    /**
+     * @var Emulation
+     */
+    protected $emulator;
 
     public function __construct(
         Action\Context $context,
         ConfigInterface $config,
-        ZendClient $client,
-        Json $json,
-        Writer $configWriter,
-        LoggerInterface $logger
+        Token $tokenizer,
+        Emulation $emulator
     )
     {
         $this->config = $config;
-        $this->client = $client;
-        $this->json = $json;
-        $this->configWriter = $configWriter;
-        $this->logger = $logger;
+        $this->tokenizer = $tokenizer;
+        $this->emulator = $emulator;
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $clientId = $this->config->getValue('merchant_id');
-        $clientSecret = $this->config->getValue('merchant_secret');
-
-        $key = base64_encode("{$clientId}:{$clientSecret}");
-
         /** @var JsonResult $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         $website = $this->_request->getParam('website');
 
-        $store = $this->_request->getParam('store');
-
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $scopeId = 0;
 
+        $data = [];
+
         if(!empty($website)) {
-            $scope = ScopeInterface::SCOPE_WEBSITE;
             $scopeId = $website;
         }
 
-        if(!empty($store)) {
-            $scope = ScopeInterface::SCOPE_STORE;
-            $scopeId = $store;
+        $this->emulator->startEnvironmentEmulation($scopeId, Area::AREA_ADMINHTML);
+        $token = $this->tokenizer->get();
+        $this->emulator->stopEnvironmentEmulation();
+
+        if(!$token) {
+            $msg =  __('Unable to Generate Token');
+
+            $code = 500;
+        } else {
+            $msg = __('Token Generated Correctly');
+            $code = 200;
         }
 
-        try {
-            $this->client
-                ->setUri(self::OAUTH_URL)
-                ->setMethod(ZendClient::POST)
-                ->setHeaders('Authentication Basic', $key)
-                ->setParameterPost([]); // TODO: set Params if needed
+       $data['msg'] = $msg;
 
-            $response = $this->client->request();
-
-            if($response->isError()) {
-                $this->logger->error($response->getBody());
-                $this->prepareResult($result, 500);
-            }
-
-            $body = $response->getBody();
-
-            $responseBody = $this->json->unserialize($body);
-
-            $this->configWriter->save('payment/veem/merchant_token', $responseBody['access_token'], $scope, $scopeId);
-        } catch (\Zend_Http_Client_Exception $e) {
-            $this->logger->error($e->getMessage(), ['exception' => $e]);
-            $this->prepareResult($result, 500);
-        }
-
-        $data = [
-            'msg' => __('Token Generated Correctly')
-        ];
-
-        $this->prepareResult($result, 200, $data);
+        $this->prepareResult($result, $code, $data);
 
         return $result;
     }

@@ -5,26 +5,37 @@
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
         <label data-bind="attr: {'for': getCode()}" class="label">
-           <img data-bind="css: buttonType"/>
-            <span data-bind="i18n: 'Pay with Veem'"></span>
+            <img data-bind="css: buttonType"/>
+            <!-- <span data-bind="i18n: getTitle()"></span><a href="https://www.veem.com/" class="veem-link" target="_blank">What is Veem?</a> -->
+            <span data-bind="i18n: getTitle()"></span>
+            <span class="veem-link-tooltip">
+                <a href="#" class="veem-link tooltip-toggle">What is Veem?</a>
+                <span class="tooltip-content">
+                    <p>What is Veem?</p>
+                    <ul>
+                        <li>Veem is a payments system that makes it easy and affordable to send and receive business to business payments around the world</li>
+                        <li>Veem is trusted by over 100,000 businesses in 96 countries</li>
+                        <li>Veem is a secure way to receive payments directly into your bank account</li>
+                    </ul>
+                    <p>Find out more at <a href="https://www.veem.com/" target="_blank">veem.com</a></p>
+                    <p>The Bank Transfer - Powered by Veem</p>
+                </span>
+            </span>
         </label>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        </div>
-        <div class="checkout-agreements-block">
-            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+        <div class="payment-method-veem-account-form">
+            <!-- ko foreach: $parent.getRegion('veem-account-form') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
         <div class="actions-toolbar">
             <div class="primary">
+                <br />
+                <br />
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
@@ -34,6 +45,7 @@
                         ">
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
+                <br />
             </div>
         </div>
     </div>

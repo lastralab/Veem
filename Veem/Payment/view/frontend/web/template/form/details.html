@@ -1,0 +1,14 @@
+<div class="veem-account-information-details" data-bind="if: isAccountDetailsVisible() && currentAccountInformation()">
+    <legend class="veem-account-info" data-bind="i18n: 'Veem Account Information'"></legend>
+    <span class="v-email"><!-- ko text: currentAccountInformation().email --><!-- /ko --><br></span>
+    <span class="v-field"><!-- ko text: currentAccountInformation().firstname --><!-- /ko -->
+        <!-- ko text: currentAccountInformation().lastname --><!-- /ko --><br/></span>
+    <span class="v-field"><!-- ko text: getCountryName(currentAccountInformation().countryId) --><!-- /ko --><br/></span>
+    <span class="v-field"><!-- ko text: currentAccountInformation().telephone --><!-- /ko --><br/><br /></span>
+    <button type="button"
+            class="action action-edit-address"
+            data-bind="click: editAccount">
+        <span class="edit-btn" data-bind="i18n: 'Edit'"></span>
+    </button>
+    <br /><br /><br />
+</div>

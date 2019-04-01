@@ -19,6 +19,7 @@ class ConfigProvider implements ConfigProviderInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
+
     }
 
     /**

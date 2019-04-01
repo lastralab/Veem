@@ -1,10 +1,4 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.root">
@@ -23,11 +17,127 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="payment" xsi:type="array">
+                                                                <item name="veem_payment" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Veem_Payment/js/view/payment/veem</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="veem" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="payments-list" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="veem-account-form" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Veem_Payment/js/view/form/account</item>
+                                                                    <item name="displayArea" xsi:type="string">veem-account-form</item>
+                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                    <item name="deps" xsi:type="string">checkoutProvider</item>
+                                                                    <item name="dataScopePrefix" xsi:type="string">veemAccount</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="form-fields" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">additional-fieldsets</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <item name="countryId" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                                    <item name="config" xsi:type="array">
+                                                                                        <item name="customScope" xsi:type="string">veemAccount</item>
+                                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                                    </item>
+                                                                                    <item name="dataScope" xsi:type="string">veemAccount.countryId</item>
+                                                                                    <item name="label" xsi:type="string">Country</item>
+                                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                                    <item name="sortOrder" xsi:type="number">115</item>
+                                                                                    <item name="validation" xsi:type="array">
+                                                                                        <item name="required-entry" xsi:type="boolean">true</item>
+                                                                                    </item>
+                                                                                    <item name="deps" xsi:type="array">
+                                                                                        <item name="0" xsi:type="string">checkoutProvider</item>
+                                                                                    </item>
+                                                                                    <item name="imports" xsi:type="array">
+                                                                                        <item name="initialOptions" xsi:type="string">index = checkoutProvider:dictionaries.country_id</item>
+                                                                                        <item name="setOptions" xsi:type="string">index = checkoutProvider:dictionaries.country_id</item>
+                                                                                    </item>
+                                                                                    <item name="visible" xsi:type="boolean">true</item>
+                                                                                </item>
+                                                                                <item name="firstname" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                                    <item name="config" xsi:type="array">
+                                                                                        <item name="customScope" xsi:type="string">veemAccount</item>
+                                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                                    </item>
+                                                                                    <item name="dataScope" xsi:type="string">veemAccount.firstname</item>
+                                                                                    <item name="label" xsi:type="string">First Name</item>
+                                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                                    <item name="sortOrder" xsi:type="number">20</item>
+                                                                                    <item name="validation" xsi:type="array">
+                                                                                        <item name="required-entry" xsi:type="boolean">true</item>
+                                                                                        <item name="max_text_length" xsi:type="number">255</item>
+                                                                                        <item name="min_text_length" xsi:type="number">1</item>
+                                                                                    </item>
+                                                                                    <item name="visible" xsi:type="boolean">true</item>
+                                                                                </item>
+                                                                                <item name="lastname" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                                    <item name="config" xsi:type="array">
+                                                                                        <item name="customScope" xsi:type="string">veemAccount</item>
+                                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                                    </item>
+                                                                                    <item name="dataScope" xsi:type="string">veemAccount.lastname</item>
+                                                                                    <item name="label" xsi:type="string">Last Name</item>
+                                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                                    <item name="sortOrder" xsi:type="number">40</item>
+                                                                                    <item name="validation" xsi:type="array">
+                                                                                        <item name="required-entry" xsi:type="boolean">true</item>
+                                                                                        <item name="max_text_length" xsi:type="number">255</item>
+                                                                                        <item name="min_text_length" xsi:type="number">1</item>
+                                                                                    </item>
+                                                                                    <item name="visible" xsi:type="boolean">true</item>
+                                                                                </item>
+                                                                                <item name="telephone" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                                    <item name="config" xsi:type="array">
+                                                                                        <item name="customScope" xsi:type="string">veemAccount</item>
+                                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                                    </item>
+                                                                                    <item name="dataScope" xsi:type="string">veemAccount.telephone</item>
+                                                                                    <item name="label" xsi:type="string">Phone Number</item>
+                                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                                    <item name="sortOrder" xsi:type="number">120</item>
+                                                                                    <item name="validation" xsi:type="array">
+                                                                                        <item name="required-entry" xsi:type="boolean">true</item>
+                                                                                        <item name="max_text_length" xsi:type="number">255</item>
+                                                                                        <item name="min_text_length" xsi:type="number">1</item>
+                                                                                        <item name="validate-phoneLax" xsi:type="boolean">true</item>
+                                                                                    </item>
+                                                                                    <item name="visible" xsi:type="boolean">true</item>
+                                                                                </item>
+                                                                                <item name="email" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                                    <item name="config" xsi:type="array">
+                                                                                        <item name="customScope" xsi:type="string">veemAccount</item>
+                                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                                    </item>
+                                                                                    <item name="dataScope" xsi:type="string">veemAccount.email</item>
+                                                                                    <item name="label" xsi:type="string">Email</item>
+                                                                                    <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                                    <item name="sortOrder" xsi:type="number">10</item>
+                                                                                    <item name="validation" xsi:type="array">
+                                                                                        <item name="required-entry" xsi:type="boolean">true</item>
+                                                                                        <item name="email2" xsi:type="boolean">true</item>
+                                                                                        <item name="max_text_length" xsi:type="number">255</item>
+                                                                                        <item name="min_text_length" xsi:type="number">1</item>
+                                                                                    </item>
+                                                                                    <item name="visible" xsi:type="boolean">true</item>
+                                                                                </item>
+                                                                            </item>
                                                                         </item>
                                                                     </item>
                                                                 </item>

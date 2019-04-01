@@ -9,7 +9,14 @@
 /** @var $block \Veem\Payment\Block\Adminhtml\System\Config\Connect\Button */
 ?>
 <div class="veem-connect-button-container">
-    <button id="<?php echo $block->getId() ?>" class="c2veem" data-mage-init='{"tokenGenerator": {"url": "<?php echo $block->getUrl('veem/oauth/generateToken') ?>"}}'>
-        <span></span>
-    </button>
+    <table class="veem-connection">
+        <tr>
+            <td width="30%" id="vconnect">
+                <button id="<?= $block->getId() ?>" class="c2veem" data-mage-init='{"tokenGenerator": {"url": "<?= $block->getUrl('veem/oauth/generateToken') ?>"}}'></button>
+            </td>
+            <td width="70%" id="vconnect">
+                <p class="veem-connect-button-container__help-block"><?=__('Once you have entered your Client ID and Secret Key, please click the connection button to retrieve your service token. This will allow you to interact with your account through Veem\'s webservices.')?></p>
+            </td>
+        </tr>
+    </table>
 </div>

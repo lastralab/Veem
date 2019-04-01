@@ -1,4 +1,194 @@
-/** BUTTON **/
+@import url('@{baseDir}Veem_Payment/css/fas-fa.css');
+
+.v-success-box {
+  background: #E4F0E6;
+  border-color: #E4F0E6;
+  color: #315c1a;
+  padding: 15px;
+}
+
+.v-logo {
+  margin:0 0 0 3px;
+}
+
+#v-payment-title{
+  margin-bottom:0;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.v-success-message {
+  color: #135E13;
+}
+
+.veem-link {
+  margin-left: 13px;
+}
+
+.veem-link-tooltip {
+  .lib-tooltip(top, @_tooltip-font-size:12px);
+}
+
+.v-details {
+  font-weight: normal;
+}
+
+.veem-account-info {
+  font-weight: bold;
+  font-size: larger;
+  line-height: 28px;
+  margin-left:-5px;
+
+  & when (@media-common = true) {
+    margin-left:-5px;
+  }
+}
+
+#veem-account-form.form {
+  padding: 0 40% 0 0;
+  font-weight: normal;
+  margin-left: -20px;
+
+  & when (@media-common = true) {
+    padding: 0;
+  }
+}
+
+.veem-account-information-details {
+  margin-left: 30px;
+}
+.claim-btn a.claim-link {
+  color: #fff;
+  font-size: 14px;
+  padding: 7px 9px;
+  border:none;
+  text-decoration:none;
+
+  &:hover {
+    color: #fff;
+    text-decoration:none;
+  }
+
+  &:visited {
+    color: #fff;
+    text-decoration:none;
+  }
+}
+
+.message.warning > .v-sent-message:first-child:before {
+  color: #6f4400;
+  top: 20px;
+
+  & when (@media-common = true) {
+    color: #6f4400;
+    top: 30px;
+  }
+}
+
+.message-warning .claim-btn {
+  background: #6f4400;
+  border-radius: 4px;
+  border: none;
+  font-size: 12px;
+  padding: 7px 25px 7px 10px;
+  color: #fff;
+  margin-bottom: 5px;
+  box-shadow: none;
+  position: absolute;
+  right: 0;
+  margin-right:10px;
+  bottom: 0;
+  display: inline-block;
+
+  &:hover {
+    background: #6f4400;
+    opacity: 0.8;
+    border-radius: 4px;
+    border: none;
+    font-size: 12px;
+    padding: 7px 25px 7px 10px;
+    color: #fff;
+  }
+
+  @media only screen and (max-width: 1065px) {
+    bottom: 0;
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 0;
+    right: 0;
+    display: block;
+    padding: 7px 25px 7px 8px;
+  }
+}
+
+#veem-account-form .label {
+  font-weight: normal;
+}
+.edit-btn {
+  font-size: 12px;
+  padding: 7px 9px;
+}
+
+.save-btn {
+  font-size: 12px;
+  padding: 7px 15px;
+}
+
+.v-request {
+  color: #fff;
+  font-size: 12px;
+  padding: 7px 15px;
+}
+
+.v-field {
+  line-height: 22px;
+}
+
+.v-email {
+  color: #006bb4;
+  font-weight: bolder;
+  line-height: 22px;
+}
+.v-email-s {
+  color: #006bb4;
+  font-weight: normal;
+  line-height: 20px;
+  margin-left:6px;
+}
+.v-info {
+  font-weight: normal;
+  line-height: 1.1;
+  margin-left: 6px;
+}
+
+.default {
+  vertical-align: baseline;
+  background: url('@{baseDir}Veem_Payment/images/logo.png') center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 0;
+  padding: 9px 20px 9px 65px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0 10px auto auto;
+  display: inline-block;
+  border:none;
+
+  &:hover {
+    background: url('@{baseDir}Veem_Payment/images/logo.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border:none;
+  }
+
+  & when (@media-common = true) {
+    display:inline-block;
+    margin: 0 5px 0 0;
+    padding:0 70px 40px 0;
+    vertical-align: middle;
+  }
+}
+
 .blue {
   vertical-align: middle;
   background: url('@{baseDir}Veem_Payment/images/VeemPay/P2Veem_blue_btn_med_default.png') center center;
@@ -53,3 +243,97 @@
   }
 }
 
+.lg--blue {
+  vertical-align: middle;
+  background: url('@{baseDir}Veem_Payment/images/VeemPay/P2Veem_blue_btn_lg_default.png') center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 0;
+  padding:50px 100px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0 10px auto auto;
+  display: inline-block;
+  border:none;
+
+  &:hover {
+    background: url('@{baseDir}Veem_Payment/images/VeemPay/P2Veem_blue_btn_lg_default.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border:none;
+  }
+
+  & when (@media-common = true) {
+    display:block;
+    margin: auto;
+    padding:50px 100px;
+  }
+}
+
+.lg--wht {
+  vertical-align: middle;
+  background: url('@{baseDir}Veem_Payment/images/VeemPay/P2Veem_wht_btn_lg_default.png') center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 0;
+  padding:50px 100px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0 10px auto auto;
+  display: inline-block;
+  border:none;
+
+  &:hover {
+    background: url('@{baseDir}Veem_Payment/images/VeemPay/P2Veem_wht_btn_lg_hover.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border:none;
+  }
+
+  & when (@media-common = true) {
+    display:block;
+    margin: auto;
+    padding:50px 100px;
+  }
+}
+
+.checkout-payment-method .step-title {
+  margin-left: 20px;
+}
+
+.checkout-payment-method .payment-method {
+  margin-left: 20px;
+}
+
+.field .label {
+  font-weight: normal;
+}
+
+#multishipping-form {
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+#p_method_veem::after {
+  content: ' ';
+  vertical-align: baseline;
+  background: url('@{baseDir}Veem_Payment/images/logo.png') center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 0;
+  padding: 9px 10px 9px 65px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  display: inline-block;
+  border:none;
+  margin-left: 20px;
+}
+
+.multishipping-checkout-billing label[for="p_method_veem"]{
+  margin-left: 85px;
+}
+
+#multishipping-form span.save-btn {
+  font-size: 16px;
+  padding: 0 15px;
+}

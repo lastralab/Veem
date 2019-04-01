@@ -13,21 +13,20 @@ define(
             },
 
             _create: function() {
+                this._super();
                 this._bind();
             },
 
             _bind: function() {
-                $(this.element).click(this.generateToken);
+                $(this.element).click(this.generateToken.bind(this));
             },
 
             generateToken: function(event) {
                 event.preventDefault();
 
-                let _self = this;
-
                 $.get({
                     showLoader: true,
-                    url : _self.this.options.url,
+                    url : this.options.url,
                     data: {
                         website: $('#website_switcher').val(),
                         store: $('#store_switcher').val()
@@ -44,7 +43,7 @@ define(
                         console.error(errorThrown);
                         alert({
                             title: $t('Error!'),
-                            content: $t('An Error occur while generating token'),
+                            content: $t('An error occurred while generating the token. Please try again later.'),
                             autoOpen: true
                         });
                     });

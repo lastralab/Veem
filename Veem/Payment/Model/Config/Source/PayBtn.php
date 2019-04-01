@@ -13,12 +13,24 @@ class PayBtn implements \Magento\Framework\Data\OptionSourceInterface
     {
         return [
             [
+                'label' => 'Default',
+                'value' => 'default'
+            ],
+            [
                 'label' => 'Style 1 (Blue)',
                 'value' => 'blue'
             ],
             [
                 'label' => 'Style 2 (White)',
                 'value' => 'wht'
+            ],
+            [
+                'label' => 'Style 3 (Blue) - Large',
+                'value' => 'lg--blue'
+            ],
+            [
+                'label' => 'Style 4 (White) - Large',
+                'value' => 'lg--wht'
             ]
         ];
     }

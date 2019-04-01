@@ -1,0 +1,53 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lazaro
+ * Date: 15/01/19
+ * Time: 01:26 PM
+ */
+
+/**
+ * @var \Veem\Payment\Block\Info $block
+ * @see \Veem\Payment\Block\Info
+ */
+$specificInfo = $block->getSpecificInformation();
+$title = $block->escapeHtml($block->getMethod()->getTitle());
+?>
+    <dl class="payment-method">
+        <dt class="v-logo">
+            <img src="<?= $block->getViewFileUrl('Veem_Payment::images/logo.png'); ?>" style="width:6em;padding-top:3px;">
+        </dt>
+        <dt id="v-payment-title" class="title"><strong><?= /* @noEscape */ $title ?></strong></dt>
+        <?php if ($specificInfo):?>
+            <?php foreach ($specificInfo as $label => $value):
+                if ($label == 'veem_email') {
+                    echo '<dt class="v-email-s">'. /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))). '</dt>';
+                }
+                if ($label == 'veem_fname') {
+                    echo '<dt class="v-info">'. /* @noEscape */ nl2br($block->escapeHtml(implode(" ", $block->getValueAsArray($value, true))));
+                }
+                if ($label == 'veem_lname') {
+                    echo /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))).'</dt>';
+                }
+                if ($label == 'veem_country') {
+                    $country = $block->getCountryName($value);
+                    echo '<dt class="v-info">'./* @noEscape */ nl2br($country).'</dt>';
+                }
+                if ($label == 'veem_phone') {
+                    echo '<dt class="v-info">'. /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray(ltrim($value, "tel:+1-"), true)))).'</dt><br />';
+                }
+
+                if (isset($specificInfo['veem_payment_status'])) {
+                    if ($label == 'claim_link' && $specificInfo['veem_payment_status'] == \Veem\Payment\Gateway\Helper\Response::VEEM_STATUS_MARK_AS_PAID) { ?>
+                        <div class="v-success-box">
+                            <table>
+                                <td style="padding:0 5px 0 0"><i class="fas fa-check-circle" style="font-size:20px;vertical-align:middle;"></i></td>
+                                <td style="padding:0 0 0 5px"><span class="v-success-message">Your Veem payment has been processed successfully.</span></td>
+                            </table>
+                        </div>
+                   <?php }
+                } ?>
+            <?php endforeach; ?>
+        <?php endif;?>
+    </dl>
+<?= $block->getChildHtml() ?>

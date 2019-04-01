@@ -1,13 +1,9 @@
-/*browser:true*/
-/*global define*/
-
 define(
     [
         'Magento_Checkout/js/view/payment/default',
-        'Magento_Checkout/js/model/quote',
-        'ko'
+        'Veem_Payment/js/model/account'
     ],
-    function (Component, quote) {
+    function (Component, veemAccount) {
         'use strict';
 
         return Component.extend({
@@ -18,26 +14,44 @@ define(
             buttonType: null,
 
             initialize: function() {
+                var _self = this;
                 this._super();
-                quote.billingAddress.subscribe(function (address) {
-                    this.isPlaceOrderActionAllowed(address !== null && address.postcode !== null);
+
+                veemAccount.accountInformation.subscribe(function (accountInfo) {
+                    _self.isPlaceOrderActionAllowed(veemAccount.validate(accountInfo));
                 }, this);
                 this.buttonType = this.getButtonType();
+
+                veemAccount.initialize();
             },
 
             getData: function() {
+                var accountInfo = veemAccount.accountInformation();
+
+                if(accountInfo === null) {
+                    return this._super();
+                }
+
                 return {
                     'method': this.item.method,
+                    'additional_data': {
+                        'email': accountInfo.email,
+                        'fname': accountInfo.firstname,
+                        'lname': accountInfo.lastname,
+                        'country': accountInfo.countryId,
+                        'phone': accountInfo.telephone
+                    }
                 };
             },
 
-            isAvailable: function() {
+            isAvailable: function () {
                 return window.checkoutConfig.payment[this.getCode()].active;
             },
 
             getButtonType: function() {
                 return window.checkoutConfig.payment[this.getCode()].button;
             }
+
         });
     }
 );

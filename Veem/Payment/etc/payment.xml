@@ -6,7 +6,7 @@
         </group>
     </groups>
     <methods>
-        <method name="veem_payment">
+        <method name="veem">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
     </methods>

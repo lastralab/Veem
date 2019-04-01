@@ -8,18 +8,20 @@
 
 namespace Veem\Payment\Gateway\Validator;
 
-
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use Veem\Payment\Model\CountryCurrencyMap;
 
 class CountryValidator extends AbstractValidator
 {
     private $config;
+    private $countryCurrencyMap;
 
-    public function __construct(ResultInterfaceFactory $resultFactory, ConfigInterface $config)
+    public function __construct(ResultInterfaceFactory $resultFactory, ConfigInterface $config, CountryCurrencyMap $countryCurrencyMap)
     {
         $this->config = $config;
+        $this->countryCurrencyMap = $countryCurrencyMap;
         parent::__construct($resultFactory);
     }
 
@@ -37,6 +39,10 @@ class CountryValidator extends AbstractValidator
             if (!in_array($validationSubject['country'], $availableCountries)) {
                 $isValid =  false;
             }
+        }
+
+        if($isValid) {
+            $isValid = $this->countryCurrencyMap->isCountryAvailable($validationSubject['country']);
         }
 
         return $this->createResult($isValid);
