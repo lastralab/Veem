@@ -1,0 +1,23 @@
+<div>
+    <form id="veem-account-form" class="form" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
+        <fieldset class="fieldset">
+            <!-- ko template: 'Veem_Payment/form/details' --><!-- /ko -->
+            <fieldset class="fieldset" data-bind="visible: !isAccountDetailsVisible()">
+                <!-- ko foreach: getRegion('additional-fieldsets') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+                <br />
+                <button type="button" data-bind="click: updateInfo" class="action primary">
+                    <span class="save-btn" data-bind="i18n: 'Save'"></span>
+                </button>
+                <button type="reset"
+                        class="action action-cancel"
+                        data-bind="click: cancelAccount">
+                    <span class="cancel-btn" data-bind="i18n: 'Cancel'"></span>
+                </button>
+                <br />
+                <br />
+            </fieldset>
+        </fieldset>
+    </form>
+</div>

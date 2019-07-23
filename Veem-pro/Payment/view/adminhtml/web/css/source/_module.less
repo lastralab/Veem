@@ -1,0 +1,193 @@
+.default {
+  vertical-align: baseline;
+  background: url('@{baseDir}Veem_Payment/images/logo.png') center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 0;
+  padding: 0 90px 40px 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0 10px auto auto;
+  display: inline-block;
+  border:none;
+
+  &:hover {
+    background: url('@{baseDir}Veem_Payment/images/logo.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border:none;
+  }
+
+  & when (@media-common = true) {
+    display:inline-block;
+    margin: 0 5px 0 0;
+    padding:0 90px 40px 0;
+    vertical-align: middle;
+  }
+}
+
+.order-payment-method-virtual > .admin__page-section-item-title > span.title {
+    display:none;
+}
+
+#v-payment-title{
+  margin-bottom:0;
+  font-weight: bold;
+}
+
+.veem-connect-button-container{
+  &__help-block{
+    color:#6c757d;
+    font-style: normal;
+    margin-top:10px;
+    font-size:0.9em;
+    margin-left:1.5rem;
+  }
+}
+
+.c2veem {
+  background-image: url('@{baseDir}Veem_Payment/images/VeemConnect/C2Veem_blue_btn_med_default.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 10px 140px 60px 30px;
+  border-radius: 5px;
+  margin: 0;
+  display: block;
+  border: none;
+  background-color: transparent;
+  vertical-align: middle;
+
+  &:hover {
+    background-image: url('@{baseDir}Veem_Payment/images/VeemConnect/C2Veem_blue_btn_med_hover.png');
+    border: none;
+    background-color: transparent;
+    background-size: contain;
+  }
+}
+
+.v-email-s {
+  color: #006bb4;
+  font-weight: normal;
+  line-height: 1.5;
+}
+.v-info {
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.admin__page-section-item-content .order-payment-currency {
+  display: none;
+}
+
+.veem-section .heading {
+  padding-left: 20rem;
+  background: url('@{baseDir}Veem_Payment/images/Veem/veem-logo.min.svg') no-repeat;
+  min-height: 5rem;
+}
+
+.veem-request-money-button-container{
+  &__button{
+    border-radius: 5px;
+    background-color: #1879c2;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+
+    &:hover,
+    &:focus,
+    &:active{
+      background-color:darken(#1879c2, 10%);
+      color: #fff;
+    }
+  }
+}
+
+.veem-request-money-modal-content{
+  .form{
+    &__label{
+      display: block;
+      margin-bottom:10px;
+
+      &--muted{
+        color:#6c757d;
+      }
+
+      &--italic{
+        font-style: italic;
+      }
+    }
+
+    &__block + &__block{
+      margin-top:20px;
+    }
+
+    &__control{
+      &--notes{
+        width: 100%;
+        max-width:100%;
+        min-width:100%;
+        min-height:70px;
+      }
+
+      &--amount{
+        padding: 3px 16px;
+        width:110px;
+      }
+
+      &--icon{
+        position:relative;
+        display:inline;
+        &:before{
+          content: '$';
+          position: absolute;
+          top: 0;
+          left: 9px;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}
+
+.veem-request-money-modal{
+  .veem-request-money-button-confirm{
+    background-color:#1879c2;
+    border:none;
+    border-radius:5px;
+    color:#fff;
+    float:left;
+    font-size:12px;
+    font-weight: normal;
+    padding:15px 20px;
+    &:hover{
+      background-color:darken(#1879c2, 10%);
+      color: #fff;
+    }
+  }
+
+  .modal-footer{
+    padding-top:0;
+  }
+
+  .modal-inner-wrap{
+    width:30%;
+  }
+}
+
+.messages-veem{
+  .messages-message-success{
+    .lib-message-icon-inner(success);
+  }
+}
+
+#payment_us_veem colgroup.value {
+  padding-right: 0;
+  width: 100%;
+}
+
+#vconnect {
+  vertical-align: middle;
+  padding:0;
+}

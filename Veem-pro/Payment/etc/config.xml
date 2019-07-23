@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Created by PhpStorm 2018.3.1
+ * Author: Tania
+ * Date: 13th December 2018
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <veem>
+                <debug>1</debug>
+                <active>0</active>
+                <sandbox_mode>1</sandbox_mode>
+                <request_money>1</request_money>
+                <model>VeemFacade</model>
+                <order_status>pending</order_status>
+                <payment_action>request_money</payment_action>
+                <title>Bank Transfer - Powered by Veem</title>
+                <currency>USD</currency>
+                <can_initialize>1</can_initialize>
+                <can_refund>0</can_refund>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <can_capture >0</can_capture>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>1</can_use_internal>
+                <can_use_for_multishipping>1</can_use_for_multishipping>
+                <is_gateway>1</is_gateway>
+                <sort_order>1</sort_order>
+                <group>online</group>
+                <paymentInfoKeys>veem_email,veem_fname,veem_lname,veem_country,veem_phone,veem_invoice_id,veem_payment_status,claim_link</paymentInfoKeys>
+            </veem>
+        </payment>
+    </default>
+</config>

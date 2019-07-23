@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Veem\Payment\Api\Data\UrlBuilderInterface" type="Veem\Payment\Model\UrlBuilder" />
+    <preference for="Veem\Payment\Api\InvoiceRepositoryInterface" type="Veem\Payment\Model\InvoiceRepository" />
+    <preference for="Veem\Payment\Api\Data\InvoiceInterface" type="Veem\Payment\Model\Invoice" />
+
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="VeemFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">\Veem\Payment\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Veem\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Veem\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">VeemValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">VeemValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">VeemCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <virtualType name="VeemConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">\Veem\Payment\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Logger, initialized with VeemConfig -->
+    <virtualType name="VeemLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Veem\Payment\Gateway\Http\Client">
+        <arguments>
+            <argument name="converter" xsi:type="object">Veem\Payment\Gateway\Http\Converter\JsonToArray</argument>
+            <argument name="logger" xsi:type="object">VeemLogger</argument>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="VeemCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">VeemRequestMoneyCommand</item>
+                <!--<item name="refund" xsi:type="string">VeemSendMoneyCommand</item>-->
+                <item name="void" xsi:type="string">VeemVoidCommand</item>
+                <item name="cancel" xsi:type="string">VeemVoidCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Request Money command -->
+    <virtualType name="VeemRequestMoneyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">VeemRequestMoneyBuilder</argument>
+            <argument name="handler" xsi:type="object">VeemResponseHandlerComposite</argument>
+            <argument name="transferFactory" xsi:type="object">RequestMoneyTransferFactory</argument>
+            <argument name="validator" xsi:type="object">Veem\Payment\Gateway\Validator\Response\RequestMoney</argument>
+            <argument name="client" xsi:type="object">VeemRequestMoneyClient</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RequestMoneyTransferFactory" type="Veem\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/veem/v1.1/invoices</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VeemRequestMoneyClient" type="Veem\Payment\Gateway\Http\Client">
+        <arguments>
+            <argument name="checkCall" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Request Money request -->
+    <virtualType name="VeemRequestMoneyBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="payment" xsi:type="string">Veem\Payment\Gateway\Request\PaymentDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void command -->
+    <virtualType name="VeemVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Veem\Payment\Gateway\Request\VoidRequest</argument>
+            <argument name="handler" xsi:type="object">VeemVoidResponseHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Veem\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Veem\Payment\Gateway\Http\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void request -->
+    <type name="Veem\Payment\Gateway\Request\VoidRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Send Money command -->
+    <virtualType name="VeemSendMoneyCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Veem\Payment\Gateway\Request\VoidRequest</argument>
+            <argument name="handler" xsi:type="object">VeemResponseHandlerComposite</argument>
+            <argument name="transferFactory" xsi:type="object">SendMoneyTransferFactory</argument>
+            <argument name="validator" xsi:type="object">Veem\Payment\Gateway\Validator\Response\SendMoney</argument>
+            <argument name="client" xsi:type="object">Veem\Payment\Gateway\Http\Client</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SendMoneyTransferFactory" type="Veem\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/veem/v1.1/payments</argument>
+        </arguments>
+    </virtualType>
+    <!-- FOr the moment doesn't seems to be a reason not to use the same validator -->
+    <virtualType name="Veem\Payment\Gateway\Validator\Response\SendMoney" type="Veem\Payment\Gateway\Validator\Response\RequestMoney"/>
+
+    <!-- Response handlers -->
+    <virtualType name="VeemResponseHandlerComposite" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="txnid" xsi:type="string">Veem\Payment\Gateway\Response\TxnIdHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Veem\Payment\Gateway\Response\TxnIdHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="VeemVoidResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="txnid" xsi:type="string">Veem\Payment\Gateway\Response\TxnVoidHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Veem\Payment\Gateway\Response\TxnVoidHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="VeemValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">VeemConfigValueHandler</item>
+                <item name="can_void" xsi:type="string">Veem\Payment\Gateway\Config\CanVoidHandler</item>
+                <item name="can_cancel" xsi:type="string">Veem\Payment\Gateway\Config\CanVoidHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="VeemConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Veem\Payment\Model\CountryCurrencyMap">
+        <arguments>
+            <argument name="transferFactory" xsi:type="object">CountryCurrencyMap</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="CountryCurrencyMap" type="Veem\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/veem/public/v1.0/country-currency-map</argument>
+            <argument name="method" xsi:type="string">GET</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VeemValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">Veem\Payment\Gateway\Validator\CountryValidator</item>
+                <item name="currency" xsi:type="string">Veem\Payment\Gateway\Validator\CurrencyValidator</item>
+                <!--<item name="availability" xsi:type="string">Veem\Payment\Gateway\Validator\AvailabilityValidator</item>-->
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Custom log file for cron logs -->
+    <virtualType name="Veem\Payment\Cron\VirtualDebug" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/veem_cron.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Veem\Payment\Cron\VirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Veem\Payment\Cron\VirtualDebug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Veem\Payment\Cron\VerifyPayment">
+        <arguments>
+            <argument name="logger" xsi:type="object">Veem\Payment\Cron\VirtualLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Block\Info">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Gateway\Request\PaymentDataBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Block\Adminhtml\System\Config\AllowToken">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Gateway\Validator\CurrencyValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Controller\Adminhtml\Oauth\GenerateToken">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Model\Ui\ConfigProvider">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Api\Data\UrlBuilderInterface">
+        <arguments>
+            <argument name="config" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Model\Token">
+        <arguments>
+            <argument name="paymentConfig" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Model\Token\Generator">
+        <arguments>
+            <argument name="paymentConfig" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Model\Token\Pinger">
+        <arguments>
+            <argument name="paymentConfig" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Veem\Payment\Model\Token\Config\Access">
+        <arguments>
+            <argument name="paymentConfig" xsi:type="object">VeemConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Customer\CustomerData\Customer">
+        <plugin name="additional_section_data" type="Veem\Payment\Plugin\Customer\CustomerData\Customer"/>
+    </type>
+
+    <type name="Magento\Payment\Helper\Data">
+        <plugin name="force_environment_emulation_for_payment_block" type="Veem\Payment\Plugin\Payment\Helper\Data"/>
+    </type>
+</config>
+

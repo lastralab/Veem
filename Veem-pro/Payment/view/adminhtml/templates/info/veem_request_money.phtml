@@ -1,0 +1,36 @@
+<?php
+/**
+ * @var  $block \Veem\Payment\Block\Adminhtml\Order\View\RequestMoney $block
+ */
+ if ($block->canShowButton()): ?>
+    <div class="veem-request-money-container">
+        <div class="veem-request-money-button-container">
+            <button type="button" class="veem-button veem-request-money-button-container__button" >
+                <?= __('Request Money') ?>
+            </button>
+        </div>
+        <div id="veem-request-modal" class="veem-request-money-modal-content" >
+            <form id="form-veem-request-money" class="form" action="<?= $block->getRequestMoneyUrl() ?>">
+                <input type="hidden" name="order_id" value="<?= $block->getOrderId() ?>">
+                <div class="form__block">
+                    <label class="form__label"><?= __('Price') ?></label>
+                    <div class="form__control form__control--icon">
+                        <input type="number" name="amount" id="veem-amount" class="form__control form__control--amount" value="<?= $block->getCurrentTotalAmount() ?>" data-validate="{required:true,'validate-currency-dollar':true }"/>
+                    </div>
+                    <label class="form__label form__label--muted form__label--italic"><small><?= __('You can submit current order amount or change total.') ?></small></label>
+                </div>
+                <div class="form__block">
+                    <label class="form__label"><?= __('Note') ?></label>
+                    <textarea name="notes" id="veem-notes" class="form__control form__control--notes"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Veem_Payment/js/order/requestMoney":{}
+        }
+    }
+    </script>
+<?php endif; ?>

@@ -1,0 +1,160 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lazaro
+ * Date: 15/01/19
+ * Time: 04:47 PM
+ */
+
+/** @var \Veem\Payment\Block\Form $block */
+/** @var \Magento\Payment\Model\Method\Adapter $method */
+$method = $block->getMethod();
+?>
+<div id="multishipping-form">
+<script>
+    require([
+        'uiLayout',
+        'jquery'
+    ], function (layout, $) {
+        $(function () {
+            layout([
+                {
+                    component: "Veem_Payment/js/view/payment/method-renderer/multishipping/veem",
+                    name: "payment_method_veem",
+                    item: {
+                        title: "<?= $method->getTitle() ?>",
+                        method: "<?= $method->getCode() ?>"
+                    }
+                }
+            ]);
+
+            layout([
+                {
+                    component: "uiComponent",
+                    name: "checkoutProvider",
+                    dictionaries: {
+                        country_id: <?= json_encode($block->getDirectoryCountryOptions()) ?>
+                    }
+                }
+            ]);
+
+            layout([
+                {
+                    parent: 'payment_method_veem',
+                    name:'veem-account-form',
+                    displayArea: 'veem-account-form',
+                    component: 'Veem_Payment/js/view/form/multishipping/account',
+                    provider: 'checkoutProvider',
+                    deps: 'checkoutProvider',
+                    dataScopePrefix: 'veemAccount',
+                    children: {
+                        'form-fields': {
+                            component: 'uiComponent',
+                            displayArea: 'additional-fieldsets',
+                            children: {
+                                'firstname': {
+                                    component: 'Magento_Ui/js/form/element/abstract',
+                                    config: {
+                                        customScope: 'veemAccount',
+                                        template: 'ui/form/field',
+                                        elementTmpl: 'ui/form/element/input'
+                                    },
+                                    dataScope: 'veemAccount.firstname',
+                                    label: 'First Name',
+                                    provider: 'checkoutProvider',
+                                    sortOrder: 30,
+                                    validation: {
+                                        'required-entry': true,
+                                        'max_text_length': 255,
+                                        'min_text_length': 1
+                                    },
+                                    visible: true
+                                },
+                                'lastname': {
+                                    component: 'Magento_Ui/js/form/element/abstract',
+                                    config: {
+                                        customScope: 'veemAccount',
+                                        template: 'ui/form/field',
+                                        elementTmpl: 'ui/form/element/input'
+                                    },
+                                    dataScope: 'veemAccount.lastname',
+                                    label: 'Last Name',
+                                    provider: 'checkoutProvider',
+                                    sortOrder: 40,
+                                    validation: {
+                                        'required-entry': true,
+                                        'max_text_length': 255,
+                                        'min_text_length': 1
+                                    },
+                                    visible: true
+                                },
+                                'telephone': {
+                                    component: 'Magento_Ui/js/form/element/abstract',
+                                    config: {
+                                        customScope: 'veemAccount',
+                                        template: 'ui/form/field',
+                                        elementTmpl: 'ui/form/element/input'
+                                    },
+                                    dataScope: 'veemAccount.telephone',
+                                    label: 'Telephone',
+                                    provider: 'checkoutProvider',
+                                    sortOrder: 120,
+                                    validation: {
+                                        'required-entry': true,
+                                        'max_text_length': 255,
+                                        'min_text_length': 1,
+                                        'validate-phoneLax': true
+                                    },
+                                    visible: true
+                                },
+                                'email': {
+                                    component: 'Magento_Ui/js/form/element/abstract',
+                                    config: {
+                                        customScope: 'veemAccount',
+                                        template: 'ui/form/field',
+                                        elementTmpl: 'ui/form/element/input'
+                                    },
+                                    dataScope: 'veemAccount.email',
+                                    label: 'Email',
+                                    provider: 'checkoutProvider',
+                                    sortOrder: 10,
+                                    validation: {
+                                        'required-entry': true,
+                                        'email2': true,
+                                        'max_text_length': 255,
+                                        'min_text_length': 1
+                                    },
+                                    visible: true
+                                },
+                                'countryId': {
+                                    component: 'Magento_Ui/js/form/element/select',
+                                    config: {
+                                        customScope: 'veemAccount',
+                                        template: 'ui/form/field',
+                                        elementTmpl: 'ui/form/element/select'
+                                    },
+                                    dataScope: 'veemAccount.countryId',
+                                    label: 'Country',
+                                    provider: 'checkoutProvider',
+                                    sortOrder: 115,
+                                    imports: {
+                                        initialOptions: 'index = checkoutProvider:dictionaries.country_id',
+                                        setOptions: 'index = checkoutProvider:dictionaries.country_id'
+                                    },
+                                    validation: {
+                                        'required-entry': true
+                                    },
+                                    visible: true
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
+
+            $('body').trigger('contentUpdated');
+        })
+    })
+</script>
+<!-- ko template: getTemplate() --><!-- /ko -->
+</div>
